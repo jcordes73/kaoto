@@ -1,5 +1,5 @@
 import { ProcessorDefinition, RouteDefinition } from '@kaoto/camel-catalog/types';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from 'lodash';
 import { camelFromJson } from '../../../stubs/camel-from';
 import { camelRouteJson } from '../../../stubs/camel-route';
 import { ROOT_PATH } from '../../../utils';
@@ -222,14 +222,14 @@ describe('Camel Route', () => {
       camelEntity.entityDef.route.description = 'This is a route description';
       const vizNode = camelEntity.toVizNode();
 
-      expect(vizNode.getNodeLabel()).toEqual('This is a route description');
+      expect(vizNode.getNodeLabel(NodeLabelType.Description)).toEqual('This is a route description');
     });
 
     it('should use the default group label if the id is not available', () => {
       camelEntity.entityDef.route.id = undefined;
       const vizNode = camelEntity.toVizNode();
 
-      expect(vizNode.getNodeLabel()).toEqual('route');
+      expect(vizNode.getNodeLabel()).toEqual('route-8888');
     });
 
     it('should use the uri as the node label', () => {

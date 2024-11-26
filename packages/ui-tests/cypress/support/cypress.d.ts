@@ -42,10 +42,12 @@ declare global {
       hideAllRoutes(): Chainable<JQuery<Element>>;
       showAllRoutes(): Chainable<JQuery<Element>>;
       // design
+      openRootConfigurationTab(step: string): Chainable<JQuery<Element>>;
       openStepConfigurationTab(step: string, stepIndex?: number): Chainable<JQuery<Element>>;
-      toggleExpandGroup(groupName: string, groupIndex?: number): Chainable<JQuery<Element>>;
+      toggleExpandGroup(groupName: string): Chainable<JQuery<Element>>;
       fitToScreen(): Chainable<JQuery<Element>>;
       closeStepConfigurationTab(): Chainable<JQuery<Element>>;
+      closeCatalogModal(): Chainable<JQuery<Element>>;
       removeNodeByName(inputName: string, nodeIndex?: number): Chainable<JQuery<Element>>;
       quickAppend(nodeIndex?: number): Chainable<JQuery<Element>>;
       selectReplaceNode(inputName: string, nodeIndex?: number): Chainable<JQuery<Element>>;
@@ -65,6 +67,8 @@ declare global {
       hoverOnRuntime(type: string): Chainable<JQuery<Element>>;
       checkCatalogVersion(version: string): Chainable<JQuery<Element>>;
       chooseFromCatalog(nodeType: string, name: string): Chainable<JQuery<Element>>;
+      checkCatalogEntryExists(nodeType: string, name: string): Chainable<JQuery<Element>>;
+      checkCatalogEntryNotExists(nodeType: string, name: string): Chainable<JQuery<Element>>;
       // nodeConfiguration
       interactWithExpressionInputObject(inputName: string, value?: string, index?: number): Chainable<JQuery<Element>>;
       addExpressionResultType(value: string, index?: number): Chainable<JQuery<Element>>;

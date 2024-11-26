@@ -1,6 +1,6 @@
 import { ProcessorDefinition } from '@kaoto/camel-catalog/types';
-import cloneDeep from 'lodash/cloneDeep';
-import { CamelUriHelper, ParsedParameters, ROOT_PATH, getValue, isDefined } from '../../../../utils';
+import { cloneDeep } from 'lodash';
+import { CamelUriHelper, ParsedParameters, getValue, isDefined } from '../../../../utils';
 import { ICamelComponentDefinition } from '../../../camel-components-catalog';
 import { CatalogKind } from '../../../catalog-kind';
 import { IKameletDefinition } from '../../../kamelets-catalog';
@@ -44,11 +44,6 @@ export class CamelComponentSchemaService {
     const lastPathSegment = splitPath[splitPath.length - 1];
     const pathAsIndex = Number.parseInt(lastPathSegment, 10);
 
-    /** If path is `#` it means the root of the Camel Route */
-    if (path === ROOT_PATH) {
-      return { processorName: 'route' as keyof ProcessorDefinition };
-    }
-
     /**
      * If the last path segment is NaN, it means this is a Camel Processor
      * for instance, `from`, `otherwise` or `to` properties in a Route
@@ -83,8 +78,9 @@ export class CamelComponentSchemaService {
       return description;
     }
 
+    const semanticString = CamelUriHelper.getSemanticString(camelElementLookup, definition);
     if (camelElementLookup.componentName !== undefined) {
-      return camelElementLookup.componentName;
+      return semanticString ?? camelElementLookup.componentName;
     }
 
     const uriString = CamelUriHelper.getUriString(definition);
@@ -103,7 +99,8 @@ export class CamelComponentSchemaService {
 
       case 'to':
       case 'toD':
-        return uriString ?? camelElementLookup.processorName;
+      case 'poll':
+        return semanticString ?? uriString ?? camelElementLookup.processorName;
 
       default:
         return camelElementLookup.processorName;
@@ -284,6 +281,7 @@ export class CamelComponentSchemaService {
 
       case 'to':
       case 'toD':
+      case 'poll':
         /** The To processor is using `to: timer:tick?period=1000` form */
         if (typeof definition === 'string') {
           return {
